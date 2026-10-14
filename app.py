@@ -6,29 +6,132 @@ from PIL import Image
 from gtts import gTTS
 from io import BytesIO
 
+# ---------------- PAGE CONFIGURATION ----------------
 st.set_page_config(
     page_title="KisanMitra",
     page_icon="🌱",
     layout="centered"
 )
 
-st.title("🌱 KisanMitra")
-st.subheader("AI Tomato Leaf Disease Detection")
-st.write("Upload a tomato leaf image to check its possible condition.")
+# ---------------- PROFESSIONAL UI DESIGN ----------------
+st.markdown("""
+<style>
+    .stApp {
+        background: linear-gradient(180deg, #f3faf2 0%, #ffffff 55%);
+    }
 
+    .block-container {
+        max-width: 1000px;
+        padding-top: 2rem;
+        padding-bottom: 3rem;
+    }
+
+    h1 {
+        color: #176b3a !important;
+        font-weight: 800 !important;
+    }
+
+    h2, h3 {
+        color: #205b38 !important;
+    }
+
+    .km-hero {
+        background: linear-gradient(135deg, #14532d, #31945a);
+        color: white;
+        padding: 30px 26px;
+        border-radius: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(28, 90, 48, 0.14);
+    }
+
+    .km-hero h1 {
+        color: white !important;
+        font-size: 2.3rem;
+        margin: 0;
+    }
+
+    .km-hero p {
+        color: #e8f5e9;
+        font-size: 1.05rem;
+        margin-bottom: 0;
+    }
+
+    div[data-testid="stFileUploader"] {
+        background: white;
+        border: 2px dashed #79ae83;
+        border-radius: 15px;
+        padding: 16px;
+    }
+
+    div.stButton > button[kind="primary"] {
+        background: #218447;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.65rem 1.4rem;
+        font-weight: 700;
+        width: 100%;
+    }
+
+    div.stButton > button[kind="primary"]:hover {
+        background: #176b3a;
+        color: white;
+        border: none;
+    }
+
+    div[data-testid="stAlert"] {
+        border-radius: 12px;
+    }
+
+    hr {
+        border-color: #dcebdc;
+    }
+
+    @media (max-width: 640px) {
+        .km-hero {
+            padding: 22px 18px;
+        }
+
+        .km-hero h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------- APP HEADER ----------------
+st.markdown("""
+<div class="km-hero">
+    <h1>🌱 KisanMitra</h1>
+    <p>AI-Powered Tomato Leaf Disease Detection</p>
+    <p>Smart farming begins with healthier plants.</p>
+</div>
+""", unsafe_allow_html=True)
+
+st.write(
+    "Upload a clear tomato leaf photo to get an AI prediction, "
+    "basic care guidance and regional-language voice support."
+)
+
+# ---------------- MODEL CONFIGURATION ----------------
 MODEL_PATH = "kisanmitra_tomato_cnn_best.keras"
 
+# IMPORTANT: Keep this order the same as during model training.
 class_names = [
     "Early Blight",
     "Healthy",
     "Late Blight"
 ]
 
-# Disease information in English, Hindi and Marathi
+# ---------------- DISEASE INFORMATION ----------------
 disease_info = {
     "Early Blight": {
         "English": {
-            "symptoms": "Brown spots, often with ring-like patterns, usually on older leaves.",
+            "title": "Tomato Early Blight",
+            "symptoms": (
+                "Brown spots, often with ring-like patterns, "
+                "usually on older leaves."
+            ),
             "care": [
                 "Remove badly affected leaves carefully.",
                 "Avoid wetting leaves while watering.",
@@ -38,7 +141,10 @@ disease_info = {
         },
         "Hindi": {
             "title": "टमाटर में अर्ली ब्लाइट",
-            "symptoms": "पत्तियों पर भूरे धब्बे दिखाई दे सकते हैं। धब्बों में गोल छल्ले जैसे निशान हो सकते हैं।",
+            "symptoms": (
+                "पत्तियों पर भूरे धब्बे दिखाई दे सकते हैं। "
+                "धब्बों में गोल छल्ले जैसे निशान हो सकते हैं।"
+            ),
             "care": [
                 "ज्यादा प्रभावित पत्तियों को सावधानी से हटाएँ।",
                 "पत्तियों पर पानी डालने से बचें।",
@@ -48,7 +154,10 @@ disease_info = {
         },
         "Marathi": {
             "title": "टोमॅटोवरील अर्ली ब्लाइट",
-            "symptoms": "पानांवर तपकिरी डाग दिसू शकतात. काही डागांमध्ये गोलाकार वलय दिसतात.",
+            "symptoms": (
+                "पानांवर तपकिरी डाग दिसू शकतात. "
+                "काही डागांमध्ये गोलाकार वलय दिसतात."
+            ),
             "care": [
                 "जास्त बाधित पाने काळजीपूर्वक काढा.",
                 "पानांवर पाणी पडणार नाही याची काळजी घ्या.",
@@ -57,9 +166,14 @@ disease_info = {
             ]
         }
     },
+
     "Healthy": {
         "English": {
-            "symptoms": "The model classified this leaf as healthy. This does not guarantee that the plant is disease-free.",
+            "title": "Healthy Tomato Leaf",
+            "symptoms": (
+                "The model classified this leaf as healthy. "
+                "This does not guarantee that the plant is disease-free."
+            ),
             "care": [
                 "Inspect leaves regularly.",
                 "Water near the soil rather than over the leaves.",
@@ -69,7 +183,10 @@ disease_info = {
         },
         "Hindi": {
             "title": "स्वस्थ टमाटर का पत्ता",
-            "symptoms": "मॉडल ने इस पत्ते को स्वस्थ बताया है। फिर भी पौधे में बीमारी होने की संभावना पूरी तरह समाप्त नहीं होती।",
+            "symptoms": (
+                "मॉडल ने इस पत्ते को स्वस्थ बताया है। "
+                "फिर भी पौधे में बीमारी होने की संभावना पूरी तरह समाप्त नहीं होती।"
+            ),
             "care": [
                 "पत्तियों की नियमित जाँच करें।",
                 "पत्तियों के बजाय मिट्टी के पास पानी दें।",
@@ -79,7 +196,10 @@ disease_info = {
         },
         "Marathi": {
             "title": "निरोगी टोमॅटोचे पान",
-            "symptoms": "मॉडेलने हे पान निरोगी म्हणून ओळखले आहे. तरीही झाड रोगमुक्त आहे याची पूर्ण खात्री होत नाही.",
+            "symptoms": (
+                "मॉडेलने हे पान निरोगी म्हणून ओळखले आहे. "
+                "तरीही झाड रोगमुक्त आहे याची पूर्ण खात्री होत नाही."
+            ),
             "care": [
                 "पानांची नियमित तपासणी करा.",
                 "पानांवर पाणी टाकण्याऐवजी मातीजवळ पाणी द्या.",
@@ -88,9 +208,14 @@ disease_info = {
             ]
         }
     },
+
     "Late Blight": {
         "English": {
-            "symptoms": "Water-soaked-looking dark patches may develop on leaves and can spread rapidly in cool, wet conditions.",
+            "title": "Tomato Late Blight",
+            "symptoms": (
+                "Water-soaked-looking dark patches may develop on leaves "
+                "and can spread rapidly in cool, wet conditions."
+            ),
             "care": [
                 "Inspect the plant and nearby plants promptly.",
                 "Avoid overhead watering and unnecessary leaf wetness.",
@@ -100,7 +225,10 @@ disease_info = {
         },
         "Hindi": {
             "title": "टमाटर में लेट ब्लाइट",
-            "symptoms": "पत्तियों पर गहरे, पानी से भीगे जैसे धब्बे दिखाई दे सकते हैं। ठंडे और नम मौसम में रोग तेजी से फैल सकता है।",
+            "symptoms": (
+                "पत्तियों पर गहरे, पानी से भीगे जैसे धब्बे दिखाई दे सकते हैं। "
+                "ठंडे और नम मौसम में रोग तेजी से फैल सकता है।"
+            ),
             "care": [
                 "पौधे और आसपास के पौधों की तुरंत जाँच करें।",
                 "पत्तियों को गीला करने से बचें।",
@@ -110,7 +238,10 @@ disease_info = {
         },
         "Marathi": {
             "title": "टोमॅटोवरील लेट ब्लाइट",
-            "symptoms": "पानांवर पाण्याने भिजल्यासारखे गडद डाग दिसू शकतात. थंड आणि दमट हवेत रोग वेगाने पसरू शकतो.",
+            "symptoms": (
+                "पानांवर पाण्याने भिजल्यासारखे गडद डाग दिसू शकतात. "
+                "थंड आणि दमट हवेत रोग वेगाने पसरू शकतो."
+            ),
             "care": [
                 "झाडाची आणि जवळच्या झाडांची त्वरित तपासणी करा.",
                 "पानांवर पाणी पडणे टाळा.",
@@ -121,16 +252,17 @@ disease_info = {
     }
 }
 
-
+# ---------------- LOAD AI MODEL ----------------
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model(MODEL_PATH)
 
 
+# ---------------- TEXT-TO-SPEECH ----------------
 @st.cache_data
-def make_audio(text, language):
+def make_audio(text, language_code):
     audio_buffer = BytesIO()
-    tts = gTTS(text=text, lang=language)
+    tts = gTTS(text=text, lang=language_code)
     tts.write_to_fp(audio_buffer)
     audio_buffer.seek(0)
     return audio_buffer.getvalue()
@@ -139,12 +271,14 @@ def make_audio(text, language):
 try:
     model = load_model()
     st.success("AI model loaded successfully!")
+
 except Exception as e:
     st.error("AI model load nahi hua.")
     st.code(str(e))
     st.stop()
 
 
+# ---------------- LANGUAGE SELECTION ----------------
 language = st.selectbox(
     "Choose your language / भाषा चुनें / भाषा निवडा",
     ["English", "Hindi", "Marathi"]
@@ -157,6 +291,7 @@ language_codes = {
 
 st.info("Tomato leaf ki JPG, JPEG ya PNG image upload karein.")
 
+# ---------------- IMAGE UPLOAD ----------------
 uploaded_file = st.file_uploader(
     "Upload a tomato leaf image",
     type=["jpg", "jpeg", "png"]
@@ -172,30 +307,44 @@ if uploaded_file is not None:
             use_container_width=True
         )
 
-        if st.button("Detect Disease", type="primary"):
+        # ---------------- PREDICTION ----------------
+        if st.button("🔍 Detect Disease", type="primary"):
+
             with st.spinner("AI image check kar raha hai..."):
-                # Resize image. The model already includes Rescaling(1/255).
+
                 resized_image = image.resize((224, 224))
+
                 image_array = np.array(
                     resized_image,
                     dtype=np.float32
                 )
-                image_array = np.expand_dims(image_array, axis=0)
 
+                image_array = np.expand_dims(
+                    image_array,
+                    axis=0
+                )
+
+                # The model includes Rescaling(1/255).
+                # Do not divide by 255 again here.
                 predictions = model.predict(
                     image_array,
                     verbose=0
                 )[0]
 
             if len(predictions) != len(class_names):
-                st.error("Model output aur class names match nahi kar rahe.")
+                st.error(
+                    "Model output aur class names match nahi kar rahe."
+                )
                 st.stop()
 
             predicted_index = int(np.argmax(predictions))
             confidence = float(predictions[predicted_index]) * 100
             predicted_class = class_names[predicted_index]
 
+            # ---------------- RESULT ----------------
+            st.divider()
             st.subheader("🔍 Prediction Result")
+
             st.write("**Detected class:**", predicted_class)
             st.write(f"**Model confidence score:** {confidence:.2f}%")
 
@@ -205,67 +354,93 @@ if uploaded_file is not None:
                     "Clear image upload karein aur expert se verify karayein."
                 )
             elif predicted_class == "Healthy":
-                st.success("Model ne leaf ko Healthy classify kiya.")
+                st.success(
+                    "Model ne leaf ko Healthy classify kiya."
+                )
             else:
-                st.warning(f"Possible {predicted_class} detected.")
+                st.warning(
+                    f"Possible {predicted_class} detected."
+                )
 
             st.caption(
                 "Confidence score model ka estimate hai, "
                 "diagnosis ki guarantee nahi."
             )
 
+            # ---------------- DISEASE INFORMATION ----------------
             st.subheader("📋 Disease Information")
 
             details = disease_info[predicted_class]
+            localized = details[language]
 
             if language == "English":
-                st.write("**Possible symptoms:**", details["English"]["symptoms"])
+                st.write("**Possible symptoms:**", localized["symptoms"])
                 st.write("**Basic care suggestions:**")
-                for item in details["English"]["care"]:
-                    st.markdown(f"- {item}")
+
+            else:
+                st.write(f"**{localized['title']}**")
+                st.write(
+                    "**लक्षण / लक्षणे:**",
+                    localized["symptoms"]
+                )
+                st.write("**देखभाल / काळजी:**")
+
+            for item in localized["care"]:
+                st.markdown(f"- {item}")
+
+            # ---------------- PREPARE VOICE TEXT ----------------
+            if language == "English":
                 voice_text = (
                     f"Prediction: {predicted_class}. "
                     f"Model confidence score: {confidence:.0f} percent. "
-                    f"Possible symptoms: {details['English']['symptoms']} "
-                    f"Basic care suggestions: "
-                    + " ".join(details["English"]["care"])
+                    f"Possible symptoms: {localized['symptoms']} "
+                    "Basic care suggestions: "
+                    + " ".join(localized["care"])
                 )
-            else:
-                localized = details[language]
-                st.write("**" + localized["title"] + "**")
-                st.write("**लक्षण / लक्षणे:**", localized["symptoms"])
-                st.write("**देखभाल / काळजी:**")
-                for item in localized["care"]:
-                    st.markdown(f"- {item}")
 
+            elif language == "Hindi":
                 voice_text = (
                     localized["title"] + ". "
                     + localized["symptoms"] + " "
                     + " ".join(localized["care"])
                     + f" मॉडल का विश्वास स्कोर {confidence:.0f} प्रतिशत है।"
-                    if language == "Hindi"
-                    else localized["title"] + ". "
+                )
+
+            else:
+                voice_text = (
+                    localized["title"] + ". "
                     + localized["symptoms"] + " "
                     + " ".join(localized["care"])
                     + f" मॉडेलचा विश्वास स्कोअर {confidence:.0f} टक्के आहे."
                 )
 
+            # ---------------- VOICE OUTPUT ----------------
             if language in language_codes:
                 st.subheader("🔊 Listen to the Result")
+
                 try:
                     audio_bytes = make_audio(
                         voice_text,
                         language_codes[language]
                     )
-                    st.audio(audio_bytes, format="audio/mp3")
+
+                    st.audio(
+                        audio_bytes,
+                        format="audio/mp3"
+                    )
+
                 except Exception:
                     st.warning(
                         "Voice audio nahi ban paya. Internet connection "
                         "check karke dobara try karein."
                     )
-            else:
-                st.info("Hindi ya Marathi select karein to voice audio sun sakte hain.")
 
+            else:
+                st.info(
+                    "Hindi ya Marathi select karein to voice audio sun sakte hain."
+                )
+
+            # ---------------- DISCLAIMER ----------------
             st.warning(
                 "Important: This is an educational AI prototype. "
                 "Leaf images alone may not confirm a disease. "
