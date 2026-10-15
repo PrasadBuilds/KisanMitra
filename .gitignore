@@ -4,3 +4,6 @@ venv/
 .env
 *.pyc
 data/
+test_images/
+tomato_dataset/
+tomato_dataset.zip..zip
