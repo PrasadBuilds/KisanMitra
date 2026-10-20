@@ -116,7 +116,7 @@ st.write(
 # ---------------- MODEL CONFIGURATION ----------------
 MODEL_PATH = "kisanmitra_tomato_cnn_best.keras"
 
-# IMPORTANT: Keep this order the same as during model training.
+# Keep this order the same as during model training.
 class_names = [
     "Early Blight",
     "Healthy",
@@ -304,7 +304,7 @@ if uploaded_file is not None:
         st.image(
             image,
             caption="Uploaded Tomato Leaf",
-            use_container_width=True
+            width="stretch"
         )
 
         # ---------------- PREDICTION ----------------
@@ -337,9 +337,22 @@ if uploaded_file is not None:
                 )
                 st.stop()
 
+            # ---------------- PREDICTION CLASS ----------------
             predicted_index = int(np.argmax(predictions))
             confidence = float(predictions[predicted_index]) * 100
             predicted_class = class_names[predicted_index]
+
+            # ---------------- DEBUG: CLASS PROBABILITIES ----------------
+            st.subheader("📊 AI Probability Scores")
+
+            for name, probability in zip(class_names, predictions):
+                percentage = float(probability) * 100
+
+                st.write(f"**{name}:** {percentage:.2f}%")
+
+                st.progress(
+                    max(0.0, min(1.0, float(probability)))
+                )
 
             # ---------------- RESULT ----------------
             st.divider()
