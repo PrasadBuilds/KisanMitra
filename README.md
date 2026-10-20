@@ -1,49 +1,105 @@
-# KisanMitra 🌱
+# 🌱 KisanMitra — AI Tomato Leaf Disease Detection
 
-## AI Tomato Leaf Disease Detection
+KisanMitra is an AI-powered educational project that identifies possible tomato leaf diseases from uploaded leaf images. It uses a trained Convolutional Neural Network (CNN) model and a Streamlit web interface to display predictions and class probabilities.
 
-KisanMitra is an AI-based educational project that predicts possible tomato leaf diseases from uploaded images.
+## 🎯 Project Objective
 
-### Features
-- Tomato leaf image upload (JPG, JPEG, PNG)
-- Detection of Healthy, Early Blight, and Late Blight classes
-- Prediction confidence score
-- Disease symptoms and basic care suggestions
-- Hindi and Marathi voice assistance
+The objective of KisanMitra is to explore how AI can help farmers identify possible tomato leaf diseases and access basic guidance in familiar languages.
 
-### Technologies Used
+## ✨ Features
+
+- Upload tomato leaf images in JPG, JPEG, or PNG format.
+- Predict one of three classes:
+  - Early Blight
+  - Healthy
+  - Late Blight
+- Display predicted class and class-wise probability scores.
+- Provide basic disease-related guidance.
+- Support Hindi and Marathi voice output.
+- Run through a Streamlit web interface.
+
+## 🛠️ Technologies Used
+
 - Python
-- TensorFlow and Keras
-- Streamlit
+- TensorFlow / Keras
 - NumPy
 - Pillow (PIL)
-- gTTS
+- Streamlit
+- gTTS (Google Text-to-Speech)
 
-### How to Run
+## 📁 Project Structure
 
-1. Open the KisanMitra project folder in the terminal.
-2. Activate the virtual environment:
+```text
+KisanMitra/
+├── app.py
+├── requirements.txt
+├── README.md
+├── testing_results.md
+├── DAY30_REPORT.md
+└── kisanmitra_tomato_cnn_best.keras
+```
 
-   ```powershell
-   .\.venv\Scripts\Activate.ps1
-   ```
+Additional files and reports may also be present in the repository.
 
-3. Install dependencies if `requirements.txt` is available:
+## ⚙️ Installation and Setup
 
-   ```powershell
-   pip install -r requirements.txt
-   ```
+### 1. Clone the repository
 
-4. Run the application:
+```bash
+git clone https://github.com/PrasadBuilds/KisanMitra.git
+cd KisanMitra
+```
 
-   ```powershell
-   python -m streamlit run app.py
-   ```
+### 2. Create and activate a virtual environment
 
-5. Open the local URL shown in the terminal.
+**Windows PowerShell:**
 
-### Important Disclaimer
-This is an educational prototype. Predictions may be incorrect and are not a confirmed diagnosis. Consult an agricultural expert before making treatment decisions.
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-### Developer
-Prasad Chandgude
+### 3. Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 4. Run the application
+
+```bash
+python -m streamlit run app.py
+```
+
+Open the local URL shown in the terminal, usually `http://localhost:8501`.
+
+## 🧪 Testing
+
+The project has been tested with sample tomato leaf images. The recorded preliminary results are available in [`testing_results.md`](testing_results.md).
+
+The current model can misclassify some images. Further testing and model improvement are needed.
+
+## ⚠️ Limitations
+
+- This is an educational prototype, not a professional agricultural diagnostic system.
+- Predictions may be incorrect under real-world field conditions.
+- The displayed probability is the model's output score; it does not guarantee that the prediction is correct.
+- Use advice from qualified agricultural experts before making important crop-treatment decisions.
+- Hindi and Marathi audio generation may require an internet connection.
+
+## 🚀 Future Improvements
+
+- Improve model performance using more diverse and representative images.
+- Evaluate the model on a separate, carefully labelled test dataset.
+- Improve disease-specific recommendations.
+- Test the application on different devices and real-world leaf images.
+
+## 👨‍💻 Developer
+
+**Prasad Dnyaneshwar Chandgude**
+
+Student project — AI/ML and Python.
+
+## 📄 Disclaimer
+
+KisanMitra is developed for educational and demonstration purposes. It should not be used as the sole basis for pesticide selection or other crop-treatment decisions.
