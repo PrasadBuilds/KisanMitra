@@ -45,7 +45,7 @@ Additional files and reports may also be present in the repository.
 
 ### 1. Clone the repository
 
-```bash
+```powershell
 git clone https://github.com/PrasadBuilds/KisanMitra.git
 cd KisanMitra
 ```
@@ -61,13 +61,13 @@ python -m venv .venv
 
 ### 3. Install dependencies
 
-```bash
+```powershell
 python -m pip install -r requirements.txt
 ```
 
 ### 4. Run the application
 
-```bash
+```powershell
 python -m streamlit run app.py
 ```
 
