@@ -36,7 +36,7 @@ KisanMitra/
 ├── README.md
 ├── testing_results.md
 ├── DAY30_REPORT.md
-└── kisanmitra_tomato_cnn_best.keras
+└── kisanmitra_tomato_cnn_balanced_experiment.keras
 ```
 
 Additional files and reports may also be present in the repository.
