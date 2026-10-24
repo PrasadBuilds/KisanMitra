@@ -23,7 +23,7 @@ The project aims to demonstrate how image classification can support preliminary
 - Architecture: Convolutional Neural Network (CNN)
 - Trainable parameters: 23,779
 - Validation accuracy: 78.78%
-- Saved model: `kisanmitra_tomato_cnn_best.keras`
+- Saved model:`kisanmitra_tomato_cnn_best.keras`
 
 ## 4. Baseline Class Recall
 
@@ -65,6 +65,8 @@ Current application features include:
 - Class-wise probability scores
 - Basic disease-related guidance
 - Hindi and Marathi text-to-speech output
+
+The current Streamlit application loads `kisanmitra_tomato_cnn_balanced_experiment.keras`.
 
 ## 8. Testing and Limitations
 
