@@ -37,3 +37,15 @@ This is a small preliminary test and does not provide a reliable estimate of ove
 The displayed class score is not a guarantee that a prediction is correct. Further evaluation should use a larger, independent, correctly labelled test dataset, including images captured under real-world field conditions.
 
 KisanMitra is an educational prototype and should not be used as the sole basis for crop-treatment decisions.
+
+## 5. Additional Manual Testing
+
+Three additional images were tested through the Streamlit application, with one image selected from each class.
+
+| Test Image | Actual Class | Predicted Class | Result |
+|---|---|---|---|
+| New Image 1 | Healthy | Healthy | Correct |
+| New Image 2 | Early Blight | Early Blight | Correct |
+| New Image 3 | Late Blight | Late Blight | Correct |
+
+**Note:** These three results were observed during manual testing. This small test is not sufficient to establish the model's overall accuracy.
