@@ -103,3 +103,18 @@ Student project — AI/ML and Python.
 ## 📄 Disclaimer
 
 KisanMitra is developed for educational and demonstration purposes. It should not be used as the sole basis for pesticide selection or other crop-treatment decisions.
+
+
+## 📸 Application Screenshots
+
+### 1. Home Page
+![KisanMitra Home Page](screenshots_folder/01_home_page.png)
+
+### 2. Image Upload
+![KisanMitra Image Upload](screenshots_folder/02_image_upload.png)
+
+### 3. Prediction Result
+![KisanMitra Prediction Result](screenshots_folder/03_prediction_result.png)
+
+### 4. Language and Voice Output
+![KisanMitra Language and Voice Output](screenshots_folder/04_language_voice.png)
