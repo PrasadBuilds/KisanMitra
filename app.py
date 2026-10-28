@@ -114,7 +114,7 @@ st.write(
 )
 
 # ---------------- MODEL CONFIGURATION ----------------
-MODEL_PATH = "kisanmitra_tomato_cnn_balanced_experiment.keras"
+MODEL_PATH = "model_files/kisanmitra_tomato_cnn_best.keras"
 
 
 # Keep this order the same as during model training.

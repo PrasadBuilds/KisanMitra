@@ -1,24 +1,35 @@
-# KisanMitra — Final Testing Report
+﻿# KisanMitra - Final Testing Report
 
 ## 1. Project Overview
-KisanMitra is an AI-based tomato leaf disease detection prototype built using Python, Streamlit, and TensorFlow.
+KisanMitra is an educational AI prototype for tomato leaf disease detection. It is built using Python, Streamlit, and TensorFlow.
 
-The app predicts one of three classes:
+The application predicts one of three classes:
 - Healthy
 - Early Blight
 - Late Blight
 
-It also provides disease information, basic care suggestions, and Hindi/Marathi voice output.
+It also provides disease information, basic care suggestions, and Hindi and Marathi voice output.
 
-## 2. Testing Results
+## 2. Independent Testing Results
 
-| Test | Result | Confidence |
-|---|---|---:|
-| Test 1 | Early Blight predicted | 98.23% |
-| Test 2 | Late Blight predicted | 46.13% |
-| Test 3 | Early Blight predicted | 58.44% |
+A total of 28 images were evaluated using the independent test results CSV.
 
-**Note:** These are model predictions, not verified correct classifications. The actual labels of the images have not been independently confirmed.
+| Metric | Result |
+|---|---:|
+| Total test images | 28 |
+| Correct predictions | 24 |
+| Incorrect predictions | 4 |
+| Overall test accuracy | 85.71% |
+
+### Class-wise Results
+
+| Class | Correct | Total | Accuracy |
+|---|---:|---:|---:|
+| Early Blight | 18 | 22 | 81.82% |
+| Healthy | 5 | 5 | 100.00% |
+| Late Blight | 1 | 1 | 100.00% |
+
+Note: The Healthy and Late Blight test samples are very limited. Their 100% results should not be treated as proof of reliable performance for those classes.
 
 ## 3. Functional Testing
 
@@ -30,18 +41,19 @@ It also provides disease information, basic care suggestions, and Hindi/Marathi 
 | Disease prediction displays | Passed |
 | Hindi voice output | Passed |
 | Marathi voice output | Passed |
-| Low-confidence warning displays | Observed |
+| Low-confidence warning | Observed |
 
 ## 4. Limitations
+- Only 28 images are included in this independent test summary.
+- The class distribution is imbalanced.
 - Predictions may be incorrect, even when confidence is high.
-- Some predictions have low confidence and require verification.
-- Google Images test images were not independently labelled.
-- Real field performance and model accuracy require further evaluation using verified test data.
+- Results on this test set do not guarantee performance on real farm images.
+- More verified and independently labelled images are needed for a stronger evaluation.
 
 ## 5. Conclusion
-The main application workflow has been tested successfully. KisanMitra can load the trained model, accept a tomato leaf image, display a prediction, provide disease information, and generate Hindi/Marathi voice output.
+The main application workflow has been tested successfully. KisanMitra loads the trained model, accepts a tomato leaf image, displays a predicted class, provides disease information, and supports Hindi and Marathi voice output.
 
-Further testing with correctly labelled images is required to evaluate prediction accuracy reliably.
+The independent test set achieved 85.71% accuracy on 28 images. Further testing with a larger, balanced, verified dataset is required to assess reliability.
 
 **Project:** KisanMitra  
 **Type:** Educational AI prototype
